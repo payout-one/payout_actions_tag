@@ -9,7 +9,7 @@ LABEL "com.github.actions.description"="Simple GitHub Action to create tag by Ci
 LABEL "com.github.actions.icon"="feather-tag"
 LABEL "com.github.actions.color"="purple"
 
-RUN apk add git bash --update
+RUN apk add git bash jq --update
 COPY entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
