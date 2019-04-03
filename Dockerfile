@@ -12,4 +12,4 @@ LABEL "com.github.actions.color"="purple"
 RUN apk add git --update
 COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
