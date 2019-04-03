@@ -27,7 +27,7 @@ then
         # Get commit message
         MESSAGE=$(git log --format=%B -n 1 $GITHUB_SHA)
         # Tag commit
-        git tag -a $TAG $GITHUB_SHA -m $MESSAGE
+        git tag -a $TAG $GITHUB_SHA -m "${MESSAGE}"
         # Push commit
         git push origin $TAG
     fi
