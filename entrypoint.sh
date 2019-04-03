@@ -20,8 +20,10 @@ else
     git config --global user.email "tech@payout.one"
     git config --global user.name "Payout Github Actions"
 
+    # Get commit message
+    MESSAGE=$(git log --format=%B -n 1 $GITHUB_SHA)
     # Tag commit
-    git tag -a $TAG $GITHUB_SHA -m "GitHub Actions automated tag ${BUILD_NUMBER}"
+    git tag -a $TAG $GITHUB_SHA -m $MESSAGE -m "GitHub Actions automated tag ${BUILD_NUMBER}"
     # Push commit
     git push origin $TAG
 fi
