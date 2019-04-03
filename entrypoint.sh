@@ -7,7 +7,7 @@ set -e
 
 # Get build number from CircleCI url
 BUILD_NUMBER=$(jq '.target_url' < "$GITHUB_EVENT_PATH"  | sed 's/[^0-9]*//g')
-STATE=$(jq '.state' < "$GITHUB_EVENT_PATH") | tr -d \"
+STATE=$(jq '.state' < "$GITHUB_EVENT_PATH" | tr -d \" )
 
 # Check if CI/CD finished
 if [ "${STATE}" == "success" ]
