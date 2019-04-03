@@ -10,10 +10,10 @@ BUILD_NUMBER=$(jq '.target_url' < "$GITHUB_EVENT_PATH"  | sed 's/[^0-9]*//g')
 STATE=$(jq '.state' < "$GITHUB_EVENT_PATH" | tr -d \" )
 
 # Check if CI/CD finished
-if [ "${STATE}" == "success" ]
+if [[ "${STATE}" == "success" ]]
 then
     # Check if we get build number
-    if [ -z "BUILD_NUMBER" ]
+    if [[ -z "$BUILD_NUMBER" ]]
     then
           echo "No build number, no tag"
     else
