@@ -29,7 +29,7 @@ then
         # Tag commit
         git tag -a $TAG $GITHUB_SHA -m "${MESSAGE}"
         # Push commit
-        git push origin $TAG
+        git push origin tag $TAG
     fi
 else
     echo $STATE
