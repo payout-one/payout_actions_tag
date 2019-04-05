@@ -17,19 +17,25 @@ then
     then
           echo "No build number, no tag"
     else
-        # Create with arg and build number
-        TAG="${1}${BUILD_NUMBER}"
+        LAST_TAG=$(git describe --always --tags $GITHUB_SHA )
+        if [[ $LAST_TAG == *"-"* ]]
+        then
+            echo "Current build is for Test or QA env"
+        else
+            # Create with arg and build number
+            TAG="${1}${BUILD_NUMBER}"
 
-        # Set git config
-        git config --global user.email "tech@payout.one"
-        git config --global user.name "Payout Github Actions"
+            # Set git config
+            git config --global user.email "tech@payout.one"
+            git config --global user.name "Payout Github Actions"
 
-        # Get commit message
-        MESSAGE=$(git log --format=%B -n 1 $GITHUB_SHA)
-        # Tag commit
-        git tag -a $TAG $GITHUB_SHA -m "${MESSAGE}"
-        # Push commit
-        git push origin tag $TAG
+            # Get commit message
+            MESSAGE=$(git log --format=%B -n 1 $GITHUB_SHA)
+            # Tag commit
+            git tag -a $TAG $GITHUB_SHA -m "${MESSAGE}"
+            # Push commit
+            git push origin tag $TAG
+        fi
     fi
 else
     echo $STATE
