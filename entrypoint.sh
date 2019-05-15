@@ -18,9 +18,9 @@ then
           echo "No build number, no tag"
     else
         LAST_TAG=$(git describe --always --tags $GITHUB_SHA )
-        if [[ $LAST_TAG == *"test-"* || $LAST_TAG == *"qa-"* ]]
+        if [[ ($LAST_TAG == *"test-"* || $LAST_TAG == *"qa-"* || $LAST_TAG == *"sandbox-"* ) && $LAST_TAG == *"${BUILD_NUMBER}" ]]
         then
-            echo "Current build is for Test or QA env"
+            echo "Current build is for Test, QA or Sandbox env"
         else
             # Create with arg and build number
             TAG="${1}${BUILD_NUMBER}"
