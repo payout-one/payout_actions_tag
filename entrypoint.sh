@@ -11,6 +11,7 @@ CONTEXT=$(jq '.context' < "$GITHUB_EVENT_PATH")
 
 cat $GITHUB_EVENT_PATH
 echo $BUILD_NUMBER
+echo $CONTEXT
 STATE=$(jq '.state' < "$GITHUB_EVENT_PATH" | tr -d \" )
 
 # Check if CI/CD finished
