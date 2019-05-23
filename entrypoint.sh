@@ -15,7 +15,7 @@ echo $CONTEXT
 STATE=$(jq '.state' < "$GITHUB_EVENT_PATH" | tr -d \" )
 
 # Check if CI/CD finished
-if [[ "${STATE}" == "success" && "${CONTEXT}" != "ci/circleci: release" ]]
+if [[ "${STATE}" == "success" && "${CONTEXT}" != "\"ci/circleci: release\"" ]]
 then
     # Check if we get build number
     if [[ -z "$BUILD_NUMBER" ]]
