@@ -7,12 +7,14 @@ set -e
 
 # Get build number from CircleCI url
 BUILD_NUMBER=$(jq '.target_url' < "$GITHUB_EVENT_PATH"  | sed 's/[^0-9]*//g')
+CONTEXT=$(jq '.context' < "$GITHUB_EVENT_PATH")
+
 cat $GITHUB_EVENT_PATH
 echo $BUILD_NUMBER
 STATE=$(jq '.state' < "$GITHUB_EVENT_PATH" | tr -d \" )
 
 # Check if CI/CD finished
-if [[ "${STATE}" == "success" ]]
+if [[ "${STATE}" == "success" && "${CONTEXT}" != "ci/circleci: release" ]]
 then
     # Check if we get build number
     if [[ -z "$BUILD_NUMBER" ]]
@@ -42,5 +44,5 @@ then
     fi
 else
     echo $STATE
-    echo "CI/CD is not finished yet"
+    echo "CI/CD is not finished yet or it's release job"
 fi
