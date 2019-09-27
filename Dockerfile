@@ -1,4 +1,4 @@
-FROM alpine
+FROM ubuntu
 
 LABEL "name"="Payout Actions - Tag"
 LABEL "maintainer"="Simple GitHub Actions for taging commits <tech@payout.one>"
@@ -9,7 +9,7 @@ LABEL "com.github.actions.description"="Simple GitHub Action to create tag by Ci
 LABEL "com.github.actions.icon"="feather-tag"
 LABEL "com.github.actions.color"="purple"
 
-RUN apk add git bash jq --update
+RUN sudo apt install hub git bash jq --update
 COPY entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
