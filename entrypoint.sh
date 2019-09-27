@@ -34,6 +34,7 @@ then
             # Set git config
             git config --global user.email "tech@payout.one"
             git config --global user.name "Payout Github Actions"
+            git config --global github.user oliver-kriska
             git config --global github.token $GITHUB_TOKEN
 
             # Get commit message
