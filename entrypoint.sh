@@ -10,10 +10,10 @@ BUILD_NUMBER=$(jq '.target_url' < "$GITHUB_EVENT_PATH"  | sed 's/[^0-9]*//g')
 CONTEXT=$(jq '.context' < "$GITHUB_EVENT_PATH")
 
 cat $GITHUB_EVENT_PATH
-echo $BUILD_NUMBER
-echo $CONTEXT
 STATE=$(jq '.state' < "$GITHUB_EVENT_PATH" | tr -d \" )
 
+git remote -v
+cat .git/config
 # Check if CI/CD finished
 if [[ "${STATE}" == "success" && "${CONTEXT}" != "\"ci/circleci: release\"" ]]
 then
@@ -41,6 +41,8 @@ then
             MESSAGE=$(git log --format=%B -n 1 $GITHUB_SHA)
             # Tag commit
             git tag -a $TAG $GITHUB_SHA -m "${MESSAGE}"
+            git remote -v
+            cat .git/config
             # Push commit
             git push origin tag $TAG
         fi
