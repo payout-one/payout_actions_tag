@@ -33,7 +33,10 @@ then
             echo $COMMIT
 
             # Tag commit
-            curl -s -X POST $GIT_REFS_URL -H "Authorization: token $GITHUB_TOKEN" -d '{"ref": "refs/tags/${TAG}","sha": "${COMMIT}"}'
+            DATA="{\"ref\":\"refs/tags/$TAG\",\"sha\":\"$COMMIT\"}"
+            echo ${DATA}
+
+            curl -s -X POST $GIT_REFS_URL -H "Authorization: token $GITHUB_TOKEN" -d ${DATA}
         fi
     fi
 else
