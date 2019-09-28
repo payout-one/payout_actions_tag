@@ -12,8 +12,6 @@ GIT_REFS_URL=$(jq .repository.git_refs_url $GITHUB_EVENT_PATH | tr -d '"' | sed 
 
 STATE=$(jq '.state' < "$GITHUB_EVENT_PATH" | tr -d \" )
 
-git remote -v
-cat .git/config
 # Check if CI/CD finished
 if [[ "${STATE}" == "success" && "${CONTEXT}" != "\"ci/circleci: release\"" ]]
 then
@@ -33,13 +31,7 @@ then
             echo $TAG
 
             # Tag commit
-            curl -s -X POST $GIT_REFS_URL -H "Authorization: token $GITHUB_TOKEN" \
-			-d @- << EOF
-			{
-			  "ref": "refs/tags/$TAG",
-			  "sha": "$GITHUB_SHA"
-			}
-			EOF
+            curl -s -X POST $GIT_REFS_URL -H "Authorization: token $GITHUB_TOKEN" -d '{"ref": "refs/tags/$TAG","sha": "$GITHUB_SHA"}'
         fi
     fi
 else
