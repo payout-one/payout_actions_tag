@@ -1,3 +1,3 @@
 FROM debian
 
-RUN apt update && apt install -y git bash jq hub
+RUN apt update && apt install -y git bash jq hub curl

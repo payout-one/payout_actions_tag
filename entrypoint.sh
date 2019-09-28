@@ -8,8 +8,8 @@ set -e
 # Get build number from CircleCI url
 BUILD_NUMBER=$(jq '.target_url' < "$GITHUB_EVENT_PATH"  | sed 's/[^0-9]*//g')
 CONTEXT=$(jq '.context' < "$GITHUB_EVENT_PATH")
+GIT_REFS_URL=$(jq .repository.git_refs_url $GITHUB_EVENT_PATH | tr -d '"' | sed 's/{\/sha}//g')
 
-cat $GITHUB_EVENT_PATH
 STATE=$(jq '.state' < "$GITHUB_EVENT_PATH" | tr -d \" )
 
 git remote -v
@@ -31,20 +31,15 @@ then
             # Create with arg and build number
             TAG="${1}${BUILD_NUMBER}"
             echo $TAG
-            # Set git config
-            git config --global user.email "tech@payout.one"
-            git config --global user.name "Payout Github Actions"
-            git config --global github.username oliver-kriska
-            git config --global github.token $GITHUB_TOKEN
 
-            # Get commit message
-            MESSAGE=$(git log --format=%B -n 1 $GITHUB_SHA)
             # Tag commit
-            git tag -a $TAG $GITHUB_SHA -m "${MESSAGE}"
-            git remote -v
-            cat .git/config
-            # Push commit
-            git push origin tag $TAG
+            curl -s -X POST $GIT_REFS_URL -H "Authorization: token $GITHUB_TOKEN" \
+			-d @- << EOF
+			{
+			  "ref": "refs/tags/$TAG",
+			  "sha": "$GITHUB_SHA"
+			}
+			EOF
         fi
     fi
 else
