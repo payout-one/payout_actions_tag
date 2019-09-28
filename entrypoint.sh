@@ -21,25 +21,25 @@ then
           echo "No build number, no tag"
     else
         COMMIT=$(git rev-parse HEAD)
-        LAST_TAG=$(git describe --always --tags $COMMIT )
-        echo $LAST_TAG
-        if [[ ($LAST_TAG == *"test-"* || $LAST_TAG == *"qa-"* || $LAST_TAG == *"sandbox-"* ) && $LAST_TAG == *"${BUILD_NUMBER}" ]]
+        LAST_TAG=$(git describe --always --tags ${COMMIT} )
+        echo ${LAST_TAG}
+        if [[ (${LAST_TAG} == *"test-"* || $LAST_TAG == *"qa-"* || ${LAST_TAG} == *"sandbox-"* ) && ${LAST_TAG} == *"${BUILD_NUMBER}" ]]
         then
             echo "Current build is for Test, QA or Sandbox env"
         else
             # Create with arg and build number
             TAG="${1}${BUILD_NUMBER}"
-            echo $TAG
-            echo $COMMIT
+            echo ${TAG}
+            echo ${COMMIT}
 
             # Tag commit
             DATA="{\"ref\":\"refs/tags/$TAG\",\"sha\":\"$COMMIT\"}"
             echo ${DATA}
 
-            curl -s -X POST $GIT_REFS_URL -H "Authorization: token $GITHUB_TOKEN" -d ${DATA}
+            curl -s -X POST ${GIT_REFS_URL} -H "Authorization: token $GITHUB_TOKEN" -d ${DATA}
         fi
     fi
 else
-    echo $STATE
+    echo ${STATE}
     echo "CI/CD is not finished yet or it's release job"
 fi
