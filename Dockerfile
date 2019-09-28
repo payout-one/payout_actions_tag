@@ -1,4 +1,4 @@
-FROM payout1/debian_hub:latest
+FROM payout1/github_action:alpine
 
 LABEL "name"="Payout Actions - Tag"
 LABEL "maintainer"="Simple GitHub Actions for taging commits <tech@payout.one>"
