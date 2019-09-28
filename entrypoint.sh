@@ -9,6 +9,7 @@ set -e
 BUILD_NUMBER=$(jq '.target_url' < "$GITHUB_EVENT_PATH"  | sed 's/[^0-9]*//g')
 CONTEXT=$(jq '.context' < "$GITHUB_EVENT_PATH")
 GIT_REFS_URL=$(jq .repository.git_refs_url $GITHUB_EVENT_PATH | tr -d '"' | sed 's/{\/sha}//g')
+COMMIT=$(git rev-parse HEAD)
 
 STATE=$(jq '.state' < "$GITHUB_EVENT_PATH" | tr -d \" )
 
@@ -20,7 +21,7 @@ then
     then
           echo "No build number, no tag"
     else
-        LAST_TAG=$(git describe --always --tags $GITHUB_SHA )
+        LAST_TAG=$(git describe --always --tags $COMMIT )
         echo $LAST_TAG
         if [[ ($LAST_TAG == *"test-"* || $LAST_TAG == *"qa-"* || $LAST_TAG == *"sandbox-"* ) && $LAST_TAG == *"${BUILD_NUMBER}" ]]
         then
@@ -31,7 +32,7 @@ then
             echo $TAG
 
             # Tag commit
-            curl -s -X POST $GIT_REFS_URL -H "Authorization: token $GITHUB_TOKEN" -d '{"ref": "refs/tags/$TAG","sha": "$GITHUB_SHA"}'
+            curl -s -X POST $GIT_REFS_URL -H "Authorization: token $GITHUB_TOKEN" -d '{"ref": "refs/tags/$TAG","sha": "$COMMIT"}'
         fi
     fi
 else
